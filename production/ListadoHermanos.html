@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title> Taber Zacate | Control </title>
+    <!-- Bootstrap -->
+    <link href="css/loading.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/loading.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!--Bienvenido-->
+    <link href="css/bienvenido.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <script src="../vendors/jquery/dist/jquery.min.js"></script> 
+
+    <script>
+      $(document).ready(function(){
+        var user = localStorage.getItem("usuario");
+        if(user===null || user==""){
+          window.location.href = "login.html";
+        }
+        document.getElementById("UsernameLogin").innerHTML = user;
+
+        buscarHermano();
+
+      });
+
+      function buscarHermano() {
+        document.getElementById("idBrother").value="";
+        document.getElementById("brother").value="";
+        document.getElementById("estado").value="";
+        document.getElementById("dui").value="";
+        document.getElementById("telefono").value="";
+        $("#loadingPage").fadeIn(300);
+        fetch('http://taberzacateapp.azurewebsites.net/api/hermano/buscar?nameHermano=1', {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json; charset=utf-8', 
+                'Accept': 'application/json',
+                'Authorization':'YRtcMG2695'
+              })
+            },)
+          .then(res => res.json())
+          .then(res => {
+            if(res.Status==200){
+              $("#cuerpo").html("");
+              if(res.Info.count>0){
+                  for(var i=0; i<res.Info.count; i++){
+                      let Estado;
+                      let ButtonActionEstado;
+                      let Dui="Sin registro";
+                      let Telefono="Sin registro";
+                      if(res.Info.data[i].Estado)
+                      {
+                          Estado="<button type='button' class='btn btn-round btn-success'>Activo</button>";
+                          ButtonActionEstado="<button type='button' class='btn btn-danger' onclick='cambiarEstado("+res.Info.data[i].IdHermano+")'><i class='fa fa-minus-circle'/></button>";
+                      }
+                      else
+                      {
+                          Estado = "<button type='button' class='btn btn-round btn-danger'>Inactivo</button>";
+                          ButtonActionEstado="<button type='button' class='btn btn-success' onclick='cambiarEstado("+res.Info.data[i].IdHermano+")'><i class='fa fa-check-circle'/></button>";
+                      }
+                      if(res.Info.data[i].Dui!=="" && res.Info.data[i].Dui.toLowerCase()!="null"){
+                        Dui=res.Info.data[i].Dui;
+                      }
+                      if(res.Info.data[i].Telefono!=="" && res.Info.data[i].Telefono.toLowerCase()!="null"){
+                        Telefono=res.Info.data[i].Telefono;
+                      }
+                    var tr = "<tr><td>"+res.Info.data[i].NameHermano+"</td>"+
+                        "<td>"+Dui+"</td>"+
+                        "<td>"+Telefono+"</td>"+
+                        "<td>"+Estado+"</td>"+
+                        "<td>"+ButtonActionEstado+"<button class='btn btn-primary' type='button' data-toggle='modal' data-target='.bs-example-modal-lg' onclick='LlenarInfo("+res.Info.data[i].IdHermano+", \""+res.Info.data[i].NameHermano+"\", "+res.Info.data[i].Estado+", \""+res.Info.data[i].Dui+"\", \""+res.Info.data[i].Telefono+"\")'><i class='fa fa-pencil'></i></button></td>";
+                    $("#cuerpo").append(tr)
+                  }
+              }
+              else{
+                new PNotify({
+                title: '¡No te preocupes!',
+                text: 'Parece que aún no has registrado ningún miembro',
+                styling: 'bootstrap3'
+                });
+              }
+              $("#loadingPage").fadeOut(0);
+            }
+            else {
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+            }
+          })
+          .catch(function(err) {
+            $("#loadingPage").fadeOut(0);
+              alert(err)
+          });
+    }
+   </script>
+  </head>
+
+  <body class="nav-md">
+    <div class="loading" id="loadingPage"></div>
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><img src="images/TaberLogo.png" style="width: 45px;height: 45px;" alt=""> <span>Taber Zacate</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="clearfix"></div>
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="agregar_registro.html"><i class="fa fa-calculator"></i> Agregar Registros </span></a></li>
+                  <li><a href="Reports.html"><i class="fa fa-download"></i> Generar Reportes </span></a></li>
+                  <li><a href="ListadoHermanos.html"><i class="fa fa-group"></i> Historial de Herman@s </span></a></li>
+                  <li><a><i class="fa fa-cog"></i> Configuración <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.html">Cambiar contraseña</a></li>
+                      <li><a href="login.html">Cerrar Sesión</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu" style="height: 55px;">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav">
+                <ul class=" navbar-right">
+                  <li class="nav-item dropdown open" style="padding-left: 15px;">
+                    <a class="user-profile">
+                      <img src="images/img.jpg" alt=""><label type="text" id="UsernameLogin"></label>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="clearfix"></div>
+
+                <div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="myModalLabel">Actualización de Información</h4>
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                                <div class="item form-group">
+                                  <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nombre <span class="required">*</span>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6">
+                                    <input type="text" id="brother" name="brother" required="required" class="form-control" />
+                                    <input type="hidden" id="idBrother" name="idBrother" required="" class="form-control" />
+                                    <input type="hidden" id="estado" name="estado" required="" class="form-control" />
+                                  </div>
+                                </div>
+                                <div class="item form-group">
+                                  <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">DUI <span class="required">*</span>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6">
+                                    <input type="text" id="dui" name="dui" required="required" class="form-control" />
+                                  </div>
+                                </div>
+                                <div class="item form-group">
+                                  <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Teléfono <span class="required">*</span>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6">
+                                    <input type="text" id="telefono" name="telefono" required="required" class="form-control" />
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary" onclick="ActualizarHermano()">Guardar Cambios</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                <!--listado hermanos-->
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 ">
+                      <div class="x_panel">
+                          <div class="x_title">
+                              <h2>Listado de hermanos</h2>
+                              <ul class="nav navbar-right panel_toolbox" style="min-width: 0px !important;">
+                                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                  </li>
+                              </ul>
+                              <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                          <br />
+                          <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th style="width:50%">Nombre</th>
+                                <th style="width:15%">Dui</th>
+                                <th style="width:15%">Telefono</th>
+                                <th style="width:10%">Estado</th>
+                                <th>Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody id="cuerpo">
+                            </tbody>
+                          </table>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Tabernaculo Biblico Bautista - Zacatecoluca ©
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- PNotify -->
+    <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+
+    <script type='text/javascript'>
+
+    function cambiarEstado(idHermano) {
+      $("#loadingPage").fadeIn(300);
+        fetch('http://taberzacateapp.azurewebsites.net/api/hermano/cambiarestado?idHermano='+idHermano, {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json; charset=utf-8', 
+                'Accept': 'application/json',
+                'Authorization':'YRtcMG2695'
+              })
+            },)
+          .then(res => res.json())
+          .then(res => {
+            if(res.Status==200){
+              new PNotify({
+                title: '¡Éxito!',
+                text: 'Estado actualizado con éxito',
+                type: 'success',
+                styling: 'bootstrap3'
+                });
+                buscarHermano();
+              $("#loadingPage").fadeOut(0);
+            }
+            else {
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+            }
+          })
+          .catch(function(err) {
+            $("#loadingPage").fadeOut(0);
+              alert(err)
+          });
+    }
+    
+    function LlenarInfo(idHermano, nombreHermano, estado, dui, telefono){
+      document.getElementById("idBrother").value = idHermano;
+      document.getElementById("brother").value   = nombreHermano;
+      document.getElementById("estado").value   = estado;
+      if(dui!=="" && dui.toLowerCase()!="null"){
+        document.getElementById("dui").value   = dui;
+      }
+      else{
+        document.getElementById("dui").value   = "";
+      }
+      if(telefono!=="" && telefono.toLowerCase()!="null"){
+        document.getElementById("telefono").value = telefono;
+      }
+      else{
+        document.getElementById("telefono").value = "";
+      }
+    }
+
+      function ActualizarHermano() {
+      $("#loadingPage").fadeIn(300);
+      var idBrother = document.getElementById("idBrother").value;
+      var brother = document.getElementById("brother").value;
+      var estado = document.getElementById("estado").value;
+      var dui = document.getElementById("dui").value;
+      var telefono = document.getElementById("telefono").value;
+      if(brother===''){
+        new PNotify({
+                title: '¡Espera un momento!',
+                text: 'Debe ingresar un nombre para continuar',
+                styling: 'bootstrap3'
+                });
+      }
+      else{
+      fetch('http://taberzacateapp.azurewebsites.net/api/hermano/actualizarhermano', {
+            method: 'POST',
+            headers: new Headers({
+              'Content-Type': 'application/json; charset=utf-8', 
+              'Accept': 'application/json',
+              'Authorization':'YRtcMG2695'
+            }),
+            body: JSON.stringify({IdHermano: idBrother, NameHermano: brother, Estado: estado, Dui:dui, Telefono:telefono})
+          },)
+        .then(res => res.json())
+        .then(res => {
+          if(res.Status==200){
+            new PNotify({
+                title: '¡Éxito!',
+                text: 'Registro actualizado con éxito',
+                type: 'success',
+                styling: 'bootstrap3'
+                });
+            $('#modal').modal('toggle');
+            location.reload();
+          }
+          else {
+            $("#loadingPage").fadeOut(0);
+            new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+          }
+        })
+        .catch(function(err) {
+          $("#loadingPage").fadeOut(0);
+            alert(err)
+        });
+    }
+  }
+    </script>
+	
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title> Taber Zacate | Control </title>
+    <!-- Bootstrap -->
+    <link href="css/loading.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <script src="../vendors/jquery/dist/jquery.min.js"></script> 
+    
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+    <script>
+        
+        $(document).ready(function(){
+          localStorage.clear();
+          $("#loadingPage").fadeOut(0);
+        });
+  
+  
+     </script>
+  </head>
+
+  <body class="login">
+    <div class="loading" id="loadingPage"></div>
+    <div>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <form>
+              <h1>Inicio de Sesión</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="Usuario" id="username" name="username"/>
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" id="password" name="password" />
+              </div>
+              <div>
+                <button type="button" class="btn btn-info submit" onclick="validateLogin()">Iniciar Sesión</a>
+              </div>
+
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <img src="images/TaberZacate.png" style="width: 300px;" alt="">
+                <br>
+                <p>© 2021 Todos los derechos reservados. Tabernaculo Biblico Bautista - Zacatecoluca</p>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+    <!-- PNotify -->
+    <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  </body>
+</html>
+<script>
+  function validateLogin() {
+    var user = document.getElementById("username").value;
+    var pass = document.getElementById("password").value;
+    if(user==='' || pass===''){
+      new PNotify({
+                title: '¡Espera un momento!',
+                text: 'Completa los campos para continuar',
+                styling: 'bootstrap3'
+                });
+    }
+    else{
+    $("#loadingPage").fadeIn(300);
+      fetch('http://taberzacateapp.azurewebsites.net//api/user/login', {
+            method: 'POST',
+            headers: new Headers({
+              'Content-Type': 'application/json; charset=utf-8', 
+              'Accept': 'application/json',
+              'Authorization':'YRtcMG2695'
+            }),
+            body: JSON.stringify({Username: user, Password: pass})
+          },)
+        .then(res => res.json())
+        .then(res => {
+          if(res.Status==200){
+            localStorage.setItem('usuario', res.Info.data.nameUser);
+            localStorage.setItem('id', res.Info.data.idUser);
+            window.location.href = "index.html";
+          }
+          else {
+            $("#loadingPage").fadeOut(0);
+            new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+          }
+        })
+        .catch(function(err) {
+          $("#loadingPage").fadeOut(0);
+            alert(err)
+        });
+    }
+  }
+  </script>

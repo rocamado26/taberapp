@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title> Taber Zacate | Control </title>
+    <!-- Bootstrap -->
+    <link href="css/loading.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/loading.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!--Bienvenido-->
+    <link href="css/bienvenido.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <script src="../vendors/jquery/dist/jquery.min.js"></script> 
+
+    <script>
+      $(document).ready(function(){
+        $("#loadingPage").fadeOut(0);
+        var user = localStorage.getItem("usuario");
+        if(user===null || user==""){
+          window.location.href = "login.html";
+        }
+        document.getElementById("UsernameLogin").innerHTML = user;
+      });
+
+
+   </script>
+  </head>
+
+  <body class="nav-md">
+    <div class="loading" id="loadingPage"></div>
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><img src="images/TaberLogo.png" style="width: 45px;height: 45px;" alt=""> <span>Taber Zacate</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="clearfix"></div>
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href="agregar_registro.html"><i class="fa fa-calculator"></i> Agregar Registros </span></a></li>
+                  <li><a href="Reports.html"><i class="fa fa-download"></i> Generar Reportes </span></a></li>
+                  <li><a href="ListadoHermanos.html"><i class="fa fa-group"></i> Historial de Herman@s </span></a></li>
+                  <li><a><i class="fa fa-cog"></i> Configuración <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.html">Cambiar contraseña</a></li>
+                      <li><a href="login.html">Cerrar Sesión</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu" style="height: 55px;">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav">
+                <ul class=" navbar-right">
+                  <li class="nav-item dropdown open" style="padding-left: 15px;">
+                    <a class="user-profile">
+                      <img src="images/img.jpg" alt=""><label type="text" id="UsernameLogin"></label>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="clearfix"></div>
+                <!--Guardado-->
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 ">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Registro de diezmos</h2>
+                                <ul class="nav navbar-right panel_toolbox" style="min-width: 0px !important;">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <br />
+                                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                                    
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Fecha <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input id="dateDiezmo" class="date-picker form-control" placeholder="Seleccione una fecha" type="text" required="required" type="text" onfocus="this.type='date'">
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                      <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nombre <span class="required">*</span>
+                                      </label>
+                                      <div class="col-md-6 col-sm-6">
+                                        <input type="text" id="brother" name="brother" required="required" class="form-control" />
+                                        <input type="hidden" id="idBrother" name="idBrother" required="" class="form-control" />
+                                      </div>
+                                      <button class="btn btn-info" type="button" onclick="buscarHermano()" ><i class="fa fa-search"></i></button>
+                                      <button class="btn btn-success" type="button" onclick="agregarHermano()"><i class="fa fa-plus"></i></button>
+                                  </div>
+                                   
+                                    <div class="item form-group">
+                                        <label for="middle-name" class="col-form-label col-md-3 col-sm-3 label-align">Diezmo</label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input id="diezmo" class="form-control" type="text" name="diezmo">
+                                        </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <div class="item form-group">
+                                        <div class="col-md-6 col-sm-6 offset-md-3">
+                                            <button class="btn btn-primary" type="reset">Limpiar</button>
+                                            <button type="button" class="btn btn-success" onclick="agregarDiezmo()">Guardar</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--listado hermanos-->
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 ">
+                      <div class="x_panel">
+                          <div class="x_title">
+                              <h2>Listado de hermanos</h2>
+                              <ul class="nav navbar-right panel_toolbox" style="min-width: 0px !important;">
+                                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                  </li>
+                              </ul>
+                              <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                          <br />
+                          <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th style="width:70%">Nombre</th>
+                                <th>Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody id="cuerpo">
+                            </tbody>
+                          </table>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Tabernaculo Biblico Bautista - Zacatecoluca ©
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+
+    <!-- PNotify -->
+    <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
+
+    <script type='text/javascript'>
+        
+    function buscarHermano() {
+      var hermano = document.getElementById("brother").value;
+      if(hermano===''){
+        new PNotify({
+                title: '¡Espera un momento!',
+                text: 'Ingresa el nombre de la persona',
+                styling: 'bootstrap3'
+                });
+      }
+      else{
+        $("#loadingPage").fadeIn(300);
+        fetch('http://taberzacateapp.azurewebsites.net/api/hermano/buscar?nameHermano='+hermano, {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json; charset=utf-8', 
+                'Accept': 'application/json',
+                'Authorization':'YRtcMG2695'
+              })
+            },)
+          .then(res => res.json())
+          .then(res => {
+            if(res.Status==200){
+              if(res.Info.count>0){
+                $("#cuerpo").html("");
+                  for(var i=0; i<res.Info.count; i++){
+                    var tr = "<tr><td>"+res.Info.data[i].NameHermano+"</td><td><button class='btn btn-success' type='button' onclick='seleccionarHermano("+res.Info.data[i].IdHermano+", \""+res.Info.data[i].NameHermano+"\")'><i class='fa fa-check-circle'></i></button></td>";
+                    $("#cuerpo").append(tr)
+                  }
+              }
+              else{
+                new PNotify({
+                title: '¡Algo salió mal!',
+                text: 'No se encontraron nombres similares, por favor agrega al nuevo miembro',
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+              }
+              $("#loadingPage").fadeOut(0);
+            }
+            else {
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+            }
+          })
+          .catch(function(err) {
+            $("#loadingPage").fadeOut(0);
+              alert(err)
+          });
+      }
+    }
+
+    function agregarHermano() {
+      var hermano = document.getElementById("brother").value;
+      if(hermano===''){
+        new PNotify({
+                title: '¡Espera un momento!',
+                text: 'Ingresa el nombre de la persona',
+                styling: 'bootstrap3'
+                });
+      }
+      else{
+        $("#loadingPage").fadeIn(300);
+        fetch('http://taberzacateapp.azurewebsites.net/api/hermano?nameHermano='+hermano, {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json; charset=utf-8', 
+                'Accept': 'application/json',
+                'Authorization':'YRtcMG2695'
+              })
+            },)
+          .then(res => res.json())
+          .then(res => {
+            if(res.Status==200){
+              document.getElementById("idBrother").value = res.Info.data;
+              document.getElementById("brother").value   = hermano.toUpperCase();
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Éxito!',
+                text: 'Registro agregado con éxito',
+                type: 'success',
+                styling: 'bootstrap3'
+                });
+            }
+            else {
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+            }
+          })
+          .catch(function(err) {
+            $("#loadingPage").fadeOut(0);
+              alert(err)
+          });
+      }
+    }
+    
+    function seleccionarHermano(idHermano, nombreHermano){
+      document.getElementById("idBrother").value = idHermano;
+      document.getElementById("brother").value   = nombreHermano;
+    }
+
+    function agregarDiezmo(){
+      var FechaDiezmo = document.getElementById("dateDiezmo").value;
+      var IdHermano = document.getElementById("idBrother").value;
+      var Diezmo = document.getElementById("diezmo").value;
+      var IdUser = localStorage.getItem("usuario");
+
+
+      if(FechaDiezmo!=="" && IdHermano!=="" && Diezmo!==""){
+        //alert(FechaDiezmo+","+IdHermano+","+Diezmo);
+        $("#loadingPage").fadeIn(300);
+        fetch('http://taberzacateapp.azurewebsites.net/api/diezmo/guardar', {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json; charset=utf-8', 
+                'Accept': 'application/json',
+                'Authorization':'YRtcMG2695'
+              }),
+              body: JSON.stringify({idhermano: IdHermano, fechadiezmo: FechaDiezmo, diezmo1: Diezmo, IdUser: IdUser})
+            },)
+          .then(res => res.json())
+          .then(res => {
+            if(res.Status==200){
+              new PNotify({
+                title: '¡Éxito!',
+                text: 'Registro almacenado exitosamente',
+                type: 'success',
+                styling: 'bootstrap3'
+                });
+              location.reload();
+            }
+            else {
+              $("#loadingPage").fadeOut(0);
+              new PNotify({
+                title: '¡Algo salió mal!',
+                text: res.Info.data,
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+              //alert(res.Info.data);
+            }
+          })
+          .catch(function(err) {
+            $("#loadingPage").fadeOut(0);
+              alert(err)
+          });
+      }
+      else{
+        new PNotify({
+                title: '¡Algo salió mal!',
+                text: 'Complete los campos para ingresar diezmo',
+                type: 'error',
+                styling: 'bootstrap3'
+                });
+      }
+    }
+    </script>
+	
+  </body>
+</html>
